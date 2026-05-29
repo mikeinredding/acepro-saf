@@ -330,6 +330,37 @@ main() {
     print_info "Gathering installation parameters...\n"
     print_info "Installer source directory: $SCRIPT_DIR"
     print_info "Default target user/home: $INSTALL_USER ($INSTALL_HOME)"
+
+    # 1.0 - Printer type / accessory configuration
+
+    print_info "Printer accessory configuration...\n"
+
+    HAS_CFS=0
+    if prompt_yes_no "Is this printer using the CFS accessory kit?"; then
+        HAS_CFS=1
+        print_success "CFS accessory kit enabled"
+    else
+        print_info "Standard printer configuration selected"
+    fi
+
+    # Select config template directory
+
+    if [[ "$HAS_CFS" -eq 1 ]]; then
+        CONFIG_SOURCE_DIR="$SCRIPT_DIR/config_cfs"
+        print_info "Using CFS config templates"
+    else
+        CONFIG_SOURCE_DIR="$SCRIPT_DIR/config"
+        print_info "Using standard config templates"
+    fi
+
+    # Validate selected config source directory
+
+    if [[ ! -d "$CONFIG_SOURCE_DIR" ]]; then
+        print_error "Config template directory not found: $CONFIG_SOURCE_DIR"
+        exit 1
+    fi
+
+    # 1.1 - Klipper installation directory
     
     # 1.1 - Klipper installation directory
     DEFAULT_KLIPPER_DIR="$INSTALL_HOME/klipper"
@@ -497,7 +528,7 @@ EOF
     print_header "Step 2: Printer Configuration Integration"
     
     # Copy acepro.cfg (the main ACE config) to config directory
-    ACEPRO_SOURCE="$SCRIPT_DIR/config/acepro.cfg"
+    ACEPRO_SOURCE="$CONFIG_SOURCE_DIR/acepro.cfg"
     ACEPRO_TARGET="$CONFIG_DIR/acepro.cfg"
     
     if [ ! -f "$ACEPRO_SOURCE" ]; then
@@ -544,7 +575,7 @@ EOF
 
     print_header "Step 3: Printer Generic Macros"
 
-    PRINTER_GENERIC_MACROS_SOURCE="$SCRIPT_DIR/config/acepro_printer_macros.cfg"
+    PRINTER_GENERIC_MACROS_SOURCE="$CONFIG_SOURCE_DIR/acepro_printer_macros.cfg"
     PRINTER_GENERIC_MACROS_TARGET="$CONFIG_DIR/acepro_printer_macros.cfg"
 
     if [ ! -f "$PRINTER_GENERIC_MACROS_SOURCE" ]; then
@@ -648,7 +679,7 @@ EOF
 
     print_header "Step 5: ACE Macro Files"
 
-    MACROS_SOURCE="$SCRIPT_DIR/config/acepro_macros.cfg"
+    MACROS_SOURCE="$CONFIG_SOURCE_DIR/acepro_macros.cfg"
     MACROS_TARGET="$CONFIG_DIR/acepro_macros.cfg"
 
     if [ ! -f "$MACROS_SOURCE" ]; then
