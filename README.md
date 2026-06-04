@@ -64,8 +64,8 @@ Automatically handles filament loading, tool changes, purging, wiping, and even 
 
 ```bash
 cd ~
-git clone -b dev https://github.com/ducati1198/acepro-any-klipper
-cd acepro-any-klipper
+git clone -b dev https://github.com/mikeinredding/acepro-saf
+cd acepro-saf
 chmod +x installer.sh
 ./installer.sh
 ```
