@@ -74,7 +74,7 @@ UPDATING THE GITHUB
 ```
 Erase the acepro-any-klipper:
 
-rm -rf ~/acepro-any-klipper
+rm -rf ~/acepro-saf
 
 After follow the install process
 ```
